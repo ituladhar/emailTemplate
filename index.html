@@ -5,102 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Metro Email Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Base styles from the email template */
-        .email-body {
-            font-family: 'Inter', Arial, sans-serif; /* Using Inter as per standard guidelines */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .email-table {
-            border-collapse: collapse;
-        }
-        .email-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-        .email-header {
-            background-color: #ffffff; /* Plain white background */
-            color: #333333;
-            padding: 20px;
-            padding-bottom: 0; /* Adjusted padding to control space before the separator */
-            text-align: center;
-        }
-        .email-header img {
-            max-width: 150px; /* Reduced size for clean header look */
-            height: auto;
-            margin-bottom: 10px; /* Space between logo and title */
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        #preview-header-logo {
-            filter: none;
-        }
-        .email-content {
-            padding: 30px;
-            color: #333333;
-            line-height: 1.6;
-        }
-        .email-content h1 {
-            font-size: 24px;
-            color: #333333;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-        .email-content p {
-            margin: 0 0 15px;
-        }
-        .email-highlight {
-            background-color: #fce4ec; /* Light Pink/Magenta Accent */
-            border-left: 4px solid #e20074; /* Metro Magenta */
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .email-highlight a {
-            background-color: #e20074;
-            color: #ffffff;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 8px; /* Rounded corners for buttons */
-            font-weight: bold;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-        .email-highlight a:hover {
-            background-color: #c40062;
-        }
-        .email-footer {
-            background-color: #f5f7fa; /* Even lighter, subtle off-white */
-            color: #4A5568;
-            text-align: left;
-            padding: 30px;
-            font-size: 12px;
-            border-radius: 0 0 8px 8px;
-        }
-        .email-footer a {
-            color: #4A5568;
-            text-decoration: none;
-        }
-        .text-magenta {
-            color: #e20074;
-        }
-        /* Custom styles for the builder UI */
-        body {
-            background-color: #f3f4f6;
-        }
-        #editor, #preview {
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body class="bg-gray-100 p-4 lg:p-8 font-sans">
 
@@ -176,52 +81,52 @@ The Q4 Price Cards are now available. **All managers must review and implement t
                 <h2 class="text-2xl font-extrabold mb-4 border-b pb-3 text-gray-700 bg-white p-4 rounded-t-xl">Live Preview (600px Max Width)</h2>
                 <div class="email-body">
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f9f9f9;"> <tr>
-                            <td align="center" style="padding: 20px 0;">
-                                <table role="presentation" class="email-container" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td class="email-header">
-                                            <img id="preview-header-logo" src="" alt="Cell Nation Logo" width="150" style="display: block; margin: 0 auto 10px auto;">
-                                            <h1 id="preview-title" style="font-size: 28px; margin: 0; color: #7a44f8; font-weight: bold;"></h1>
-                                            <div style="width: 70%; margin: 20px auto 0 auto; border-bottom: 1px solid #e0e0e0; box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1);"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="email-content">
-                                            <h1 id="preview-headline"></h1>
-                                            <div id="preview-body"></div>
-                                            <div class="email-highlight">
-                                                <p id="preview-cta-description" style="margin-bottom: 15px; font-weight: bold; font-size: 14px;"></p>
-                                                <a href="#" id="preview-cta"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="email-footer">
-                                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-                                                <tr>
-                                                    <td>
-                                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                                                            <tr>
-                                                                <td width="90" style="padding-right: 20px; vertical-align: top;">
-                                                                    <img id="preview-footer-logo" src="" alt="Cell Nation" width="90" style="display: block;">
-                                                                </td>
-                                                                <td style="vertical-align: top; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; text-align: left;">
-                                                                    <p id="preview-footer-name" style="margin: 0 0 1px 0; font-weight: bold; color: #2D3748; font-size: 16px;"></p>
-                                                                    <p id="preview-footer-title" style="margin: 0 0 1px 0; color: #4A5568;"></p>
-                                                                    <p id="preview-footer-market" style="margin: 0; color: #4A5568;"></p>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <p style="margin-top: 20px; font-size: 11px; font-weight: bold; color: #718096;">Cell Nation  Internal Communication   </p>
-                                             <p style="margin-top: 0.0px; font-size: 11px;font-style: oblique; color: #718096;">Confidential – For internal use only. Do not share or forward externally </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
+                                <td align="center" style="padding: 20px 0;">
+                                    <table role="presentation" class="email-container" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                        <tr>
+                                            <td class="email-header">
+                                                <img id="preview-header-logo" src="" alt="Cell Nation Logo" width="150" style="display: block; margin: 0 auto 10px auto;">
+                                                <h1 id="preview-title" style="font-size: 28px; margin: 0; color: #7a44f8; font-weight: bold;"></h1>
+                                                <div style="width: 70%; margin: 20px auto 0 auto; border-bottom: 1px solid #e0e0e0; box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1);"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="email-content">
+                                                <h1 id="preview-headline"></h1>
+                                                <div id="preview-body"></div>
+                                                <div class="email-highlight">
+                                                    <p id="preview-cta-description" style="margin-bottom: 15px; font-weight: bold; font-size: 14px;"></p>
+                                                    <a href="#" id="preview-cta"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="email-footer">
+                                                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                    <tr>
+                                                        <td>
+                                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                                                <tr>
+                                                                    <td width="90" style="padding-right: 20px; vertical-align: top;">
+                                                                        <img id="preview-footer-logo" src="" alt="Cell Nation" width="90" style="display: block;">
+                                                                    </td>
+                                                                    <td style="vertical-align: top; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; text-align: left;">
+                                                                        <p id="preview-footer-name" style="margin: 0 0 1px 0; font-weight: bold; color: #2D3748; font-size: 16px;"></p>
+                                                                        <p id="preview-footer-title" style="margin: 0 0 1px 0; color: #4A5568;"></p>
+                                                                        <p id="preview-footer-market" style="margin: 0; color: #4A5568;"></p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <p style="margin-top: 20px; font-size: 11px; font-weight: bold; color: #718096;">Cell Nation Internal Communication</p>
+                                                <p style="margin-top: 0.0px; font-size: 11px;font-style: oblique; color: #718096;">Confidential – For internal use only. Do not share or forward externally </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
                     </table>
                 </div>
             </div>
