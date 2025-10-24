@@ -1,104 +1,94 @@
-// --- DOM Elements ---
-const titleInput = document.getElementById('title-input');
-const headerLogoInput = document.getElementById('header-logo-input'); 
-const headlineInput = document.getElementById('headline-input');
-const bodyInput = document.getElementById('body-input');
-const ctaTextInput = document.getElementById('cta-text-input');
-const ctaLinkInput = document.getElementById('cta-link-input');
-const ctaDescriptionInput = document.getElementById('cta-description-input');
-const footerLogoInput = document.getElementById('footer-logo-input');
-const footerNameInput = document.getElementById('footer-name-input');
-const footerTitleInput = document.getElementById('footer-title-input');
-const footerMarketInput = document.getElementById('footer-market-input');
+// builder.js
 
-const previewTitle = document.getElementById('preview-title');
-const previewHeaderLogo = document.getElementById('preview-header-logo'); 
-const previewHeadline = document.getElementById('preview-headline');
-const previewBody = document.getElementById('preview-body');
-const previewCta = document.getElementById('preview-cta');
-const previewCtaDescription = document.getElementById('preview-cta-description');
-const previewFooterLogo = document.getElementById('preview-footer-logo');
-const previewFooterName = document.getElementById('preview-footer-name');
-const previewFooterTitle = document.getElementById('preview-footer-title');
-const previewFooterMarket = document.getElementById('preview-footer-market');
+document.addEventListener('DOMContentLoaded', () => {
+    // A list of input elements and their corresponding preview elements/attributes
+    const mappings = [
+        // Header/Title
+        { inputId: 'header-logo-input', previewId: 'preview-header-logo', attr: 'src' },
+        { inputId: 'title-input', previewId: 'preview-title', attr: 'innerHTML' },
+        { inputId: 'headline-input', previewId: 'preview-headline', attr: 'innerHTML' },
 
-/**
- * Simple markdown-to-HTML converter
- * Handles bold (**), italics (* or _), horizontal rule (---), and ACTION REQUIRED highlighting.
- */
-function formatContent(text) {
-    let html = text;
+        // Call-to-Action (CTA)
+        { inputId: 'cta-text-input', previewId: 'preview-cta', attr: 'innerHTML' },
+        { inputId: 'cta-link-input', previewId: 'preview-cta', attr: 'href' },
+        { inputId: 'cta-description-input', previewId: 'preview-cta-description', attr: 'innerHTML' },
+        
+        // Footer
+        { inputId: 'footer-logo-input', previewId: 'preview-footer-logo', attr: 'src' },
+        { inputId: 'footer-name-input', previewId: 'preview-footer-name', attr: 'innerHTML' },
+        { inputId: 'footer-title-input', previewId: 'preview-footer-title', attr: 'innerHTML' },
+        { inputId: 'footer-market-input', previewId: 'preview-footer-market', attr: 'innerHTML' },
+    ];
 
-    // 1. HORIZONTAL RULE: Replace "---" on its own line with an HTML hr
-    const hr_style = 'border: 0; border-top: 1px solid #e0e0e0; margin: 20px 0;';
-    // Use regex to match "---" only when it's on a line by itself (or with whitespace)
-    html = html.replace(/^\s*---/gm, `<hr style="${hr_style}">`);
+    /**
+     * Converts simple markdown-like syntax to HTML.
+     * @param {string} text The raw text from the textarea.
+     * @returns {string} The HTML string.
+     */
+    function processBodyContent(text) {
+        // 1. Replace horizontal rule marker
+        let html = text.replace(/---/g, '<div style="margin: 20px 0; border-top: 1px solid #e0e0e0;"></div>');
 
-    // 2. Formatting (ITALICS and BOLD)
-    // ITALICS: Replace *text* or _text_ with <em>text</em>.
-    html = html.replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
-    
-    // BOLD: Replace **text** with <strong>text</strong>
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
-    // 3. ACTION REQUIRED: Highlight specific phrases in magenta
-    // Note: If 'ACTION REQUIRED' is also enclosed in ** it will be bold and magenta.
-    html = html.replace(/ACTION REQUIRED/g, '<span class="text-magenta">ACTION REQUIRED</span>');
+        // 2. Simple Markdown-style formatting (bold and italics)
+        html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // **bold** -> <b>bold</b>
+        html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');     // *italics* -> <i>italics</i>
+        
+        // 3. Convert newlines to paragraphs (blocks of text separated by two or more newlines)
+        const paragraphs = html.split(/\n\s*\n/);
+        
+        // Wrap each paragraph in <p> tags and filter out empty strings
+        return paragraphs
+            .map(p => p.trim())
+            .filter(p => p.length > 0)
+            .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`) // Replace single newlines within a block with <br>
+            .join('');
+    }
 
-    // 4. PARAGRAPHS: Split by one or more newlines and wrap each line in a <p> tag
-    const paragraphs = html.split(/\n+/).map(p => p.trim()).filter(p => p.length > 0);
-    
-    // Check for lines that are just the <hr> tag to avoid wrapping them in <p>
-    return paragraphs.map(p => {
-        if (p.startsWith('<hr')) {
-            return p;
+    /**
+     * Updates a single preview element based on input.
+     */
+    function updatePreviewElement(inputId, previewId, attr) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        
+        if (input && preview) {
+            const value = input.value;
+            
+            if (attr === 'innerHTML') {
+                preview.innerHTML = value;
+            } else if (attr === 'src' || attr === 'href') {
+                preview[attr] = value;
+            }
         }
-        return `<p style="margin: 0 0 15px;">${p}</p>`;
-    }).join('');
-}
+    }
 
-/**
- * Updates the preview pane with the content from the input fields.
- */
-function updatePreview() {
-    // Update Cell Nation Logo (Header)
-    previewHeaderLogo.src = headerLogoInput.value;
+    /**
+     * Handles the specific logic for the body content.
+     */
+    function updateBodyContent() {
+        const input = document.getElementById('body-input');
+        const preview = document.getElementById('preview-body');
+        
+        if (input && preview) {
+            preview.innerHTML = processBodyContent(input.value);
+        }
+    }
 
-    // Update Title
-    previewTitle.textContent = titleInput.value;
+    // Initialize all previews with default values
+    mappings.forEach(map => updatePreviewElement(map.inputId, map.previewId, map.attr));
+    updateBodyContent();
 
-    // Update Headline (with formatting)
-    previewHeadline.innerHTML = formatContent(headlineInput.value);
-    
-    // Update Body (with formatting)
-    previewBody.innerHTML = formatContent(bodyInput.value);
+    // Attach event listeners for real-time updates
+    mappings.forEach(map => {
+        const input = document.getElementById(map.inputId);
+        if (input) {
+            input.addEventListener('input', () => updatePreviewElement(map.inputId, map.previewId, map.attr));
+        }
+    });
 
-    // Update CTA Button
-    previewCta.textContent = ctaTextInput.value;
-    previewCta.href = ctaLinkInput.value;
-    
-    // Update CTA Description
-    previewCtaDescription.textContent = ctaDescriptionInput.value;
-
-    // Update Footer
-    previewFooterLogo.src = footerLogoInput.value;
-    previewFooterName.textContent = footerNameInput.value;
-    previewFooterTitle.textContent = footerTitleInput.value;
-    previewFooterMarket.textContent = footerMarketInput.value;
-}
-
-// --- Event Listeners ---
-const inputs = [
-    titleInput, headerLogoInput, headlineInput, bodyInput, 
-    ctaTextInput, ctaLinkInput, ctaDescriptionInput, 
-    footerLogoInput, footerNameInput, footerTitleInput, footerMarketInput
-];
-
-inputs.forEach(input => {
-    // Listen for input changes in all fields
-    input.addEventListener('input', updatePreview);
+    // Special listener for the main body content
+    const bodyInput = document.getElementById('body-input');
+    if (bodyInput) {
+        bodyInput.addEventListener('input', updateBodyContent);
+    }
 });
-
-// --- Initial Load ---
-// Run updatePreview when the document is fully loaded to populate the preview with default values
-document.addEventListener('DOMContentLoaded', updatePreview);
